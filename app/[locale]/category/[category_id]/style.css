@@ -1,0 +1,30 @@
+@media only screen and (min-width: 768px) {
+	.header-img {
+		background-image: url(https://8ded8880.rocketcdn.me/themes/cosmecos-new/wp-content/uploads/2021/02/page-title-pic4.jpg);
+	}
+}
+
+.product-container {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+}
+
+.last-in-row {
+	margin-right: 0;
+}
+
+.product-tag {
+	transition: background-color 0.3s ease;
+	background-color: transparent;
+}
+
+.product-tag:hover {
+	background-color: #339994;
+}
+
+@media (max-width: 950px) {
+	.cat-column {
+		display: none;
+	}
+}

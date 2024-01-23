@@ -1,0 +1,20 @@
+{
+	"Address": "Address",
+	"Phone": "Phone",
+	"Email": "Email",
+	"SEND MESSAGE": "SEND MESSAGE",
+	"contact-1": "Your email address will not be published Required fields are marked*",
+	"Full name *": "Full name *",
+	"Email *": "Email *",
+	"Subject": "Subject",
+	"Message": "Message",
+	"Send": "Send",
+	"Organic Cosmetic": "Organic Cosmetic",
+	"Contacts": "Contacts",
+	"Full name":"Full name",
+	"Phone Number":"Phone Number",
+	"Name is required":"Name is required",
+"Phone Number is required":"Phone Number is required",
+"Message is required":"Message is required",
+"success":"Thank you we will contact you soon."
+}

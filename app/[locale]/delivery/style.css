@@ -1,0 +1,42 @@
+section {
+    flex-wrap: nowrap;
+}
+
+.premium {
+    background-color: #faf6f5;
+    background-image: url(https://8ded8880.rocketcdn.me/themes/cosmecos-new/wp-content/uploads/2020/12/bg-price-item-large-2.png);
+    background-position: bottom right;
+    background-repeat: no-repeat;
+}
+
+.deluxe {
+    background-color: #2a2a2a;
+    background-image: url(https://8ded8880.rocketcdn.me/themes/cosmecos-new/wp-content/uploads/2020/12/bg-price-item-large-active-2.png);
+    background-position: bottom right;
+    background-repeat: no-repeat;
+}
+
+.deluxe>* {
+    color: white;
+}
+
+.page-footer {
+    min-height: 30vh;
+    background-color: #faece8;
+    background-image: url(https://8ded8880.rocketcdn.me/themes/cosmecos-new/wp-content/uploads/2021/01/home3-bg-4-2.jpg);
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+@media (max-width: 767px) {
+    section {
+        flex-wrap: wrap;
+    }
+}
+
+@media only screen and (min-width: 768px) {
+    .header-img {
+        background-image: url(https://8ded8880.rocketcdn.me/themes/cosmecos-new/wp-content/uploads/2020/11/page-title-pic2.jpg);
+    }
+}
