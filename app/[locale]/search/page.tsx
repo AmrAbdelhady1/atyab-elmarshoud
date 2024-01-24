@@ -20,7 +20,7 @@ const Search = () => {
 				secondText='Search Results'
 			/>
 
-			<div className='grid grid-cols-1 items-center my-10 md:my-20 lg:my-32 xl:my-40 px-5 gap-10 md:grid-cols-2 lg:grid-cols-4 2xl:px-[300px]'>
+			{/* <div className='grid grid-cols-1 items-center my-10 md:my-20 lg:my-32 xl:my-40 px-5 gap-10 md:grid-cols-2 lg:grid-cols-4 2xl:px-[300px]'>
 				<ProductCard
 					image={product1Image}
 					productName='Perfect Concealer'
@@ -77,7 +77,7 @@ const Search = () => {
 					priceAfterDiscount='$20.00'
 					sale={true}
 				/>
-			</div>
+			</div> */}
 		</div>
 	);
 };
