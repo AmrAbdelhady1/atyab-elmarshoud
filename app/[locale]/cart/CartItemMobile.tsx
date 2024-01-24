@@ -69,9 +69,14 @@ interface cartItem {
 interface CartItemProps {
 	cartItem: cartItem;
 	index: number;
+	currency: string;
 }
 
-const CartItemMobile: React.FC<CartItemProps> = ({ cartItem, index }) => {
+const CartItemMobile: React.FC<CartItemProps> = ({
+	cartItem,
+	index,
+	currency,
+}) => {
 	const t = useTranslations();
 	const dispatch = useAppDispatch();
 	const product_id = cartItem?.product_id;
@@ -118,7 +123,9 @@ const CartItemMobile: React.FC<CartItemProps> = ({ cartItem, index }) => {
 				<div className='flex justify-between'>
 					<p className='font-raleway text-lg font-bold'>{t('Product')}:</p>
 					<p className='font-raleway text-lg font-medium cursor-pointer hover:text-[#eaaa85] transition-all duration-500'>
-						<Link href='/product/5'>{cartItem.product.name}</Link>
+						<Link href={`/product/${cartItem.product.id}`}>
+							{cartItem.product.name}
+						</Link>
 					</p>
 				</div>
 			</div>
@@ -126,7 +133,7 @@ const CartItemMobile: React.FC<CartItemProps> = ({ cartItem, index }) => {
 				<div className='flex justify-between'>
 					<p className='font-raleway text-lg font-bold'>{t('Price')}:</p>
 					<p className='font-nunito text-lg font-semibold'>
-						{cartItem.product.price}
+						{cartItem.product.price + ' ' + currency}
 					</p>
 				</div>
 			</div>
@@ -154,7 +161,7 @@ const CartItemMobile: React.FC<CartItemProps> = ({ cartItem, index }) => {
 				<div className='flex justify-between'>
 					<p className='font-raleway text-lg font-bold'>{t('Subtotal')}:</p>
 					<p className='font-nunito text-lg font-semibold text-[#eaaa85]'>
-						{cartItem.product.price * cartItem.quantity}
+						{cartItem.product.price * cartItem.quantity + ' ' + currency}
 					</p>
 				</div>
 			</div>

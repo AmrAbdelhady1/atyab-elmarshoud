@@ -49,7 +49,7 @@ const Wishlist = async ({
 
       <div className="my-10 md:my-20 lg:my-32 xl:my-40 px-10 2xl:px-[300px]">
         <div className="grid grid-cols-1 items-center gap-10 md:grid-cols-2 lg:grid-cols-4">
-          {products.map((product: any) => (
+          {products?.map((product: any) => (
             <ProductCard
               image={product1Image}
               productName="Perfect Concealer"

@@ -1,12 +1,11 @@
 'use client';
 
 import Image from 'next/image';
-import { useTranslations } from 'next-intl';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
+import { useAppDispatch } from '@/redux/hooks/hooks';
 
 import {
-	removeFromCart,
-	getTotal,
 	addToCartAsync,
 	fetchCartProducts,
 	removeFromCartAsync,
@@ -14,7 +13,6 @@ import {
 
 import { IoCloseOutline } from 'react-icons/io5';
 import { FaMinus, FaPlus } from 'react-icons/fa';
-import { useAppDispatch } from '@/redux/hooks/hooks';
 
 interface Gallery {
 	url: string;
@@ -65,9 +63,10 @@ interface cartItem {
 
 interface CartItemProps {
 	cartItem: cartItem;
+	currency: string;
 }
 
-const CartItem: React.FC<CartItemProps> = ({ cartItem }) => {
+const CartItem: React.FC<CartItemProps> = ({ cartItem, currency }) => {
 	//console.log('cart item : ', cartItem);
 	const t = useTranslations();
 	const dispatch = useAppDispatch();
@@ -109,10 +108,12 @@ const CartItem: React.FC<CartItemProps> = ({ cartItem }) => {
 				/>
 			</th>
 			<th className='flex-1 font-raleway text-lg font-medium cursor-pointer hover:text-[#eaaa85] transition-all duration-500'>
-				<Link href='/product/5'>{cartItem.product.name}</Link>
+				<Link href={`/product/${cartItem.product.id}`}>
+					{cartItem.product.name}
+				</Link>
 			</th>
 			<th className='flex-[0.8] font-nunito text-lg font-semibold'>
-				{cartItem.product.price}
+				{cartItem.product.price + ' ' + currency}
 			</th>
 			<th
 				className={`flex-1 font-raleway text-xl font-medium flex items-center ${
@@ -135,7 +136,7 @@ const CartItem: React.FC<CartItemProps> = ({ cartItem }) => {
 				</div>
 			</th>
 			<th className='flex-1 font-nunito text-lg font-semibold text-[#eaaa85]'>
-				{cartItem.product.price * cartItem.quantity}
+				{cartItem.product.price * cartItem.quantity + ' ' + currency}
 			</th>
 		</tr>
 	);

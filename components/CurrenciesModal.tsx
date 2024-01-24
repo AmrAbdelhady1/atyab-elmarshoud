@@ -49,8 +49,9 @@ const CurrenciesModal = ({
 
   const handleCountrySelect = (country: Country) => {
     onCountryChange(country);
-    addCookie("country-id", country.id);
+    addCookie("country_id", country.id);
     addCookie("currency", country.currency.code);
+    addCookie("currency_id", country.currency.id);
     addCookie("iso", country.iso);
   };
 

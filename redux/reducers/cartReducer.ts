@@ -125,6 +125,7 @@ export const fetchCartProducts = createAsyncThunk(
 	'cart/fetchCartProducts',
 	async () => {
 		const token = await getCookie('auth-token');
+		const iso = await getCookie('iso');
 		// const token = '2447|uoc5PZKFu0rtO7DuF4T5dmV5rmFGCZ2Ox6CXjKUO';
 		// console.log('token: ', token);
 		try {
@@ -133,6 +134,7 @@ export const fetchCartProducts = createAsyncThunk(
 				headers: {
 					Authorization: `Bearer ${token}`,
 					locale: 'en',
+					'Country-Iso': iso,
 				},
 			});
 

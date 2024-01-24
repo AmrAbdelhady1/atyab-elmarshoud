@@ -1,11 +1,8 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
-import { useDispatch } from 'react-redux';
 
 import {
-	removeFromCart,
-	getTotal,
 	removeFromCartAsync,
 	fetchCartProducts,
 } from '@/redux/reducers/cartReducer';
@@ -62,9 +59,10 @@ interface cartItem {
 
 interface OrderItemProps {
 	cartItem: cartItem;
+	currency: string;
 }
 
-const OrderItem: React.FC<OrderItemProps> = ({ cartItem }) => {
+const OrderItem: React.FC<OrderItemProps> = ({ cartItem, currency }) => {
 	const t = useTranslations();
 	const dispatch = useAppDispatch();
 	const product_id = cartItem?.product_id;
@@ -88,15 +86,17 @@ const OrderItem: React.FC<OrderItemProps> = ({ cartItem }) => {
 			</div>
 			<div className='flex-[0.5] flex flex-col justify-center gap-2'>
 				<p className='font-raleway font-medium text-lg cursor-pointer hover:text-[#6396d0] transition-all duration-300'>
-					<Link href='/product'>{cartItem.product.name}</Link>
+					<Link href={`/product/${cartItem.product.id}`}>
+						{cartItem.product.name}
+					</Link>
 				</p>
 				<p className='font-nunito font-semibold text-base text-[#616161]'>
-					{cartItem.product.price} x {cartItem.quantity}
+					{cartItem.product.price + ' ' + currency} x {cartItem.quantity}
 				</p>
 			</div>
 			<div className='flex-[0.2] pt-2'>
 				<p className='font-nunito font-semibold text-base text-[#6396d0]'>
-					{productSubtotal}
+					{productSubtotal + ' ' + currency}
 				</p>
 			</div>
 			<div className='flex-[0.1] pt-2'>

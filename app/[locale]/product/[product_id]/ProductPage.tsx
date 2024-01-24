@@ -1,9 +1,15 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
+import { useAppDispatch } from '@/redux/hooks/hooks';
+
+import {
+	addToCartAsync,
+	fetchCartProducts,
+} from '@/redux/reducers/cartReducer';
 
 import ProductCard from '@/components/ProductCard';
 import { PreLoader } from '@/components';
@@ -14,43 +20,12 @@ import { CiStar } from 'react-icons/ci';
 
 import headerImage from '@/public/assets/images/product/header.png';
 import profileImage from '@/public/assets/images/product/profile.png';
+import { useSelector } from 'react-redux';
 
-const DUMMY_PRODUCT = {
-	id: 181,
-	category_id: 9,
-	name: 'MAMOOL MARSHOUD BLACK (Large Size )',
-	image:
-		'https://atyab-staging.cryptdev.com/storage/upload/products/n5qMepc60GjTuA5Y0V6FVhY0k4iV80yNwkf0JEwp.png',
-	price: 52,
-	purchasable_type: 'unlimited',
-	purchasable: 0,
-	quantity: 0,
-	weight: 0.41,
-	featured: false,
-	views: 6468,
-	sort: 1,
-	sold: 279,
-	gallery: [
-		{
-			url: 'https://atyab-staging.cryptdev.com/storage/upload/products/n5qMepc60GjTuA5Y0V6FVhY0k4iV80yNwkf0JEwp.png',
-			name: null,
-		},
-	],
-	is_favorite: false,
-	ingredients: 'Orange, Jasmine, Rose, Apple, Patchouli, Musk, Amber',
-	description: 'This item contains 84g of Mamool',
-	discount: 0,
-	category: {
-		id: 9,
-		name: 'Home Fragrance',
-		image:
-			'http://127.0.0.1:8000/storage/upload/categories/LRnDr.Home Fragrance.jpg',
-		featured: 1,
-		active: 1,
-		sort: 6,
-	},
-	url: 'http://127.0.0.1:8000/ar/181/product/%D9%85%D8%B9%D9%85%D9%88%D9%84%20%D9%85%D8%B1%D8%B4%D9%88%D8%AF%20%D8%A7%D8%B3%D9%88%D8%AF%20%28%D8%A7%D9%84%D8%AD%D8%AC%D9%85%20%D8%A7%D9%84%D9%83%D8%A8%D9%8A%D8%B1%20%29',
-};
+interface Gallery {
+	url: string;
+	name: string | null;
+}
 
 interface Category {
 	id: number;
@@ -67,40 +42,76 @@ interface Product {
 	name: string;
 	image: string;
 	price: number;
-	purchasable_type: number;
-	purchasable: number;
+	purchasable_type: string;
+	purchusable: number;
 	quantity: number;
 	weight: number;
 	featured: boolean;
 	views: number;
 	sort: number;
 	sold: number;
-	discount: number;
+	gallery: Gallery[];
+	is_favorite: boolean;
 	ingredients: string;
 	description: string;
-	is_favorite: boolean;
-	slug: string;
+	discount: number;
 	category: Category;
+	url: string;
 }
 
 interface ProductPageProps {
-	recommendedProductsData: any[];
+	recommendedProductsData: Product[];
+	productData: Product;
+	currency: string;
 }
 
 const ProductPage: React.FC<ProductPageProps> = ({
 	recommendedProductsData,
+	productData,
+	currency,
 }) => {
 	const t = useTranslations();
+	const dispatch = useAppDispatch();
+	const cart = useSelector((state: any) => state.CartReducer);
+
 	const [isLiked, setIsLiked] = useState(false);
 	const [count, setCount] = useState(0);
 	const [activeButton, setActiveButton] = useState('DESCRIPTION');
+
+	const product_id = productData.id;
+
+	const getQuantityByProductId = () => {
+		const cartItem = cart.items.find(
+			(item: any) => item.product_id === product_id
+		);
+
+		cartItem ? setCount(cartItem.quantity) : setCount(0);
+	};
 
 	const handleButtonClick = (button: string) => {
 		setActiveButton(button);
 	};
 
-	const tags = DUMMY_PRODUCT.category.name.split(' ');
-	const ingredientsArray = DUMMY_PRODUCT.ingredients.split(', ');
+	const handleIncreaseProduct = async () => {
+		const quantity = 1;
+		await dispatch(addToCartAsync({ product_id, quantity }));
+		await dispatch(fetchCartProducts());
+	};
+
+	const handleDecreaseProduct = async () => {
+		const quantity = -1;
+		await dispatch(addToCartAsync({ product_id, quantity }));
+		await dispatch(fetchCartProducts());
+	};
+
+	useEffect(() => {
+		getQuantityByProductId();
+		console.log('getting count: ', count);
+	}, [cart]);
+
+	const tags = productData.category.name.split(' ');
+	const ingredientsArray =
+		productData.ingredients !== null ? productData.ingredients.split(', ') : [];
 
 	return (
 		<>
@@ -114,14 +125,14 @@ const ProductPage: React.FC<ProductPageProps> = ({
 						<div className='relative flex flex-wrap items-center justify-center'>
 							<Image
 								alt='product image'
-								src={DUMMY_PRODUCT.image}
+								src={productData.image}
 								width={600}
 								height={600}
 								className='object-contain h-[70%] w-[70%]'
 							/>
 
 							<div className='h-[110%] w-[110%] border border-black absolute inset-auto'></div>
-							{DUMMY_PRODUCT.discount === 0 && (
+							{productData.discount === 0 && (
 								<div className='bg-black px-5 py-2 absolute top-[5%] left-[-10%]'>
 									<p className='text-white'>{t('SALE')}</p>
 								</div>
@@ -129,16 +140,16 @@ const ProductPage: React.FC<ProductPageProps> = ({
 						</div>
 						<div className='flex flex-col gap-5 items-start justify-start'>
 							<p className='text-[#616161] text-3xl font-normal max-w-[60ch]'>
-								{t(DUMMY_PRODUCT.name)}
+								{productData.name}
 							</p>
 							<div className='flex gap-5'>
-								{DUMMY_PRODUCT.discount !== 0 && (
+								{productData.discount !== 0 && (
 									<p className='text-xl font-normal line-through text-[#969696]'>
 										{t('$27.00')}
 									</p>
 								)}
 								<p className='text-xl font-normal text-[#339994]'>
-									{t(`$${DUMMY_PRODUCT.price}`)}
+									{productData.price + ' ' + currency}
 								</p>
 							</div>
 							<div className='flex gap-0.5'>
@@ -149,52 +160,44 @@ const ProductPage: React.FC<ProductPageProps> = ({
 								<FaStar color='#ffa16a' />
 							</div>
 							<p className='text-[#616161] text-base font-normal max-w-[60ch] leading-[1.875em]'>
-								{DUMMY_PRODUCT.description}
+								{productData.description}
 							</p>
 							<div className='flex gap-2 items-center justify-center mt-10'>
 								<p className='text-sm font-semibold'>VIEWS: </p>
-								<p className='text-md font-light'>{DUMMY_PRODUCT.views}</p>
+								<p className='text-md font-light'>{productData.views}</p>
 							</div>
 							<div className='flex gap-2 items-center justify-center'>
 								<p className='text-sm font-semibold'>CATEGORY: </p>
-								<p className='text-md font-light'>{DUMMY_PRODUCT.category.name}</p>
+								<p className='text-md font-light'>{productData.category.name}</p>
 							</div>
 							<div className='flex gap-2 items-center justify-center'>
 								<p className='text-sm font-semibold'>TAGS: </p>
-								{tags.map((word, index) => (
+								{tags.map((word) => (
 									<Link
-										key={index}
-										href={`/category/${DUMMY_PRODUCT.category.id}`}
+										key={word}
+										href={`/category/${productData.category.id}`}
 										className='text-md font-normal border border-black px-2 hover:border-none hover:bg-[#339994] transition-all duration-500'>
 										{word}
 									</Link>
 								))}
 							</div>
 							<div className='flex gap-3 items-center justify-center mt-10'>
-								<button
-									className='border border-black font-normal p-4 hover:text-white hover:bg-black transition-all duration-300'
-									onClick={() =>
-										setCount((prevCount: number) => {
-											if (prevCount - 1 < 0) {
-												return 0;
-											} else {
-												return prevCount - 1;
-											}
-										})
-									}>
-									<FaMinus size={12} />
-								</button>
+								{count !== 0 && (
+									<button
+										className={`border border-black font-normal p-4 hover:text-white hover:bg-black transition-all duration-300 `}
+										onClick={handleDecreaseProduct}>
+										<FaMinus size={12} />
+									</button>
+								)}
 								<p className='border border-black font-normal p-2.5 px-4'>{count}</p>
 								<button
 									className='border border-black font-normal p-4 hover:text-white hover:bg-black transition-all duration-300'
-									onClick={() =>
-										setCount((prevCount) => {
-											return prevCount + 1;
-										})
-									}>
+									onClick={handleIncreaseProduct}>
 									<FaPlus size={12} />
 								</button>
-								<button className='animate-button'>{t('ADD TO CART')}</button>
+								<button className='animate-button' onClick={handleIncreaseProduct}>
+									{t('ADD TO CART')}
+								</button>
 								{!isLiked ? (
 									<BsHeart
 										className='mx-2'
@@ -237,29 +240,35 @@ const ProductPage: React.FC<ProductPageProps> = ({
 									DESCRIPTION
 								</p>
 								<p className='text-[#616161] text-base font-normal max-w-[90ch] leading-[1.875em]'>
-									{DUMMY_PRODUCT.description}
+									{productData.description}
 								</p>
 								<hr className='w-[25%] my-5' />
-								<p className='text-[#616161] text-2xl font-normal max-w-[90ch] leading-[1.875em] mb-3'>
-									INGREDIENTS
-								</p>
-								<ul>
-									{ingredientsArray.map((ingredient) => (
-										<li className='flex items-center justify-start gap-3 mb-5'>
-											<FaCheckCircle color='#339994' size={20} />
-											<p className='text-[#616161] text-base font-semibold'>
-												{ingredient}
-											</p>
-										</li>
-									))}
-								</ul>
-								<hr className='w-[25%] my-5' />
+								{productData.ingredients !== null && (
+									<>
+										<p className='text-[#616161] text-2xl font-normal max-w-[90ch] leading-[1.875em] mb-3'>
+											INGREDIENTS
+										</p>
+										<ul>
+											{ingredientsArray.map((ingredient) => (
+												<li
+													className='flex items-center justify-start gap-3 mb-5'
+													key={ingredient}>
+													<FaCheckCircle color='#339994' size={20} />
+													<p className='text-[#616161] text-base font-semibold'>
+														{ingredient}
+													</p>
+												</li>
+											))}
+										</ul>
+										<hr className='w-[25%] my-5' />
+									</>
+								)}
 								<table className='max-w-[370px]'>
 									<tbody>
 										<tr className='bg-[#F3F3F3] text-left'>
 											<th className='px-8 py-2 text-[#616161] text-lg'>{t('WEIGHT')}</th>
 											<th className='px-8 py-2 text-[#616161] text-lg'>
-												{DUMMY_PRODUCT.weight} kg
+												{productData.weight} kg
 											</th>
 										</tr>
 										{/* <tr>
@@ -356,15 +365,8 @@ const ProductPage: React.FC<ProductPageProps> = ({
 						</h1>
 						<div className='flex flex-wrap items-center justify-evenly gap-[4rem] mt-10 max-md:flex-col max-md:items-center max-md:justify-center'>
 							{recommendedProductsData.map((product) => (
-								<div className='max-w-[15rem]'>
-									<ProductCard
-										image={product.image}
-										productName={product.name}
-										price={product.price}
-										discount={product.discount}
-										sale={product.discount === 0 ? false : true}
-										product={product}
-									/>
+								<div className='max-w-[15rem]' key={product.id}>
+									<ProductCard product={product} currency={currency} />
 								</div>
 							))}
 						</div>

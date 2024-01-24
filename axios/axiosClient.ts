@@ -43,6 +43,8 @@ export const deleteData = async (url: string) => {
 
 export const addData = async (data: any, url: string) => {
 	const token = await getCookie('auth-token');
+	const locale = await getCookie('NEXT_LOCALE');
+	const iso = await getCookie('iso');
 
 	const options = {
 		method: 'POST',
@@ -50,15 +52,21 @@ export const addData = async (data: any, url: string) => {
 		data: { ...data },
 		headers: {
 			Authorization: `Bearer ${token}`,
+			locale,
+			"Country-Iso": iso,
 		},
 	};
 
 	try {
 		const response = await axios.request(options);
-		return response.data;
+		if(response.data){
+			return response.data;
+		}else{
+			return response;
+		}
 	} catch (error) {
-		return null;
-	} finally {
+		console.log("add data error",error)
+		return error;
 	}
 };
 

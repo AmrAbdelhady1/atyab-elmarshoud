@@ -17,6 +17,7 @@ import sideSplash2Image from '@/public/assets/images/about-us/sidesplash2.png';
 
 import './style.css';
 import { BASE_URL } from '@/constants/constants';
+import Link from 'next/link';
 
 interface Gallery {
 	url: string;
@@ -58,33 +59,11 @@ interface Product {
 interface ShopCatalogPageProps {
 	categoriesData: Category[];
 	productsData: Product[];
+	newArrivalProductsData: Product[];
+	currency: string;
 	categoryId: string;
 	locale: string;
 }
-
-const newArrivals = [
-	{
-		prodName: 'Marshoud 4 White',
-		image:
-			'https://atyab-staging.cryptdev.com/storage/upload/products/BSVVuEkZepBdEBj6xp8aeUDtEIpw9zjbDzt2m4wW.png',
-		price: 89,
-		newPrice: 0,
-	},
-	{
-		prodName: 'Marshoud 4 Blue',
-		image:
-			'https://atyab-staging.cryptdev.com/storage/upload/products/6d8Zt.Marshoud 4 Blue 100ml.png',
-		price: 96,
-		newPrice: 0,
-	},
-	{
-		prodName: 'Marshoud 4 Black',
-		image:
-			'https://atyab-staging.cryptdev.com/storage/upload/products/jMtVvIplVnBNCMXPBmltD7wr30lpExfHdPNRFPUU.png',
-		price: 89,
-		newPrice: 0,
-	},
-];
 
 const sort = [
 	{ name: 'Default', value: 'default' },
@@ -100,6 +79,8 @@ const productTags = ['Cosmetic', 'FaceCare', 'Perfume', 'Skincare'];
 const ShopCatalogPage: React.FC<ShopCatalogPageProps> = ({
 	categoriesData,
 	productsData,
+	newArrivalProductsData,
+	currency,
 	categoryId,
 	locale,
 }) => {
@@ -147,6 +128,10 @@ const ShopCatalogPage: React.FC<ShopCatalogPageProps> = ({
 		});
 		setFilteredProducts(filtered);
 	};
+
+	// useEffect(() => {
+	// 	router.refresh()
+	// },[currency])
 
 	return (
 		<>
@@ -197,16 +182,7 @@ const ShopCatalogPage: React.FC<ShopCatalogPageProps> = ({
 					) : (
 						<article className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 items-center gap-10'>
 							{filteredProducts?.map((product) => (
-								<ProductCard
-									key={product.id}
-									// id={product.id}
-									// image={product.image}
-									// productName={product.name}
-									// price={product.price}
-									// discount={product.discount}
-									// sale={product.discount === 0 ? false : true}
-									product={product}
-								/>
+								<ProductCard key={product.id} product={product} currency={currency} />
 							))}
 						</article>
 					)}
@@ -264,9 +240,10 @@ const ShopCatalogPage: React.FC<ShopCatalogPageProps> = ({
 							}}
 						/>
 
-						<div className='flex justify-between items-center'>
+						<div className='flex flex-col items-stretch gap-3'>
 							<p>
-								{t('PRICE')}: ${sliderValue[0]} - ${sliderValue[1]}
+								{t('PRICE')}: {currency + ' ' + sliderValue[0]} -{' '}
+								{currency + ' ' + sliderValue[1]}
 							</p>
 							<button className='animate-button !h-[55px] !bg-transparent'>
 								{t('Filter')}
@@ -279,25 +256,31 @@ const ShopCatalogPage: React.FC<ShopCatalogPageProps> = ({
 							{t('Meet New Arrivals')}
 						</h2>
 
-						{newArrivals.map((el, index) => {
+						{newArrivalProductsData.map((product) => {
 							return (
-								<div className='flex mb-5' key={index}>
+								<div className='flex mb-5' key={product.id}>
 									<Image
-										alt={`Product Name ${index}`}
-										src={el.image}
+										alt={`Product Name ${product.id}`}
+										src={product.image}
 										width={70}
 										height={70}
 										className='me-6 w-[70px] h-[70px]'
 									/>
 									<div className='flex flex-col items-start justify-between'>
-										<p>{t(el.prodName)}</p>
-										{el.newPrice ? (
+										<Link
+											href={`/product/${product.id}`}
+											className='cursor-pointer hover:text-[#339994] hover:scale-105 transition-all ease-in-out'>
+											{product.name}
+										</Link>
+										{product.discount !== 0 ? (
 											<div className='flex'>
-												<p className='line-through me-3'>${el.price}</p>
-												<p>${el.newPrice}</p>
+												<p className='line-through me-3'>
+													{product.price + ' ' + currency}
+												</p>
+												<p>{product.price - product.discount + ' ' + currency}</p>
 											</div>
 										) : (
-											<p className=' text-center'>{el.price}</p>
+											<p className=' text-center'>{product.price + ' ' + currency}</p>
 										)}
 										<div className='flex gap-0.5 items-center justify-center'>
 											<FaStar color='#D5D5D5' size={15} />

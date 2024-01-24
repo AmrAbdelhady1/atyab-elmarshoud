@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter, usePathname } from "@/navigation";
 import { useTranslations } from "next-intl";
 import { Link } from "@/navigation";
@@ -14,7 +14,7 @@ import { SocialLinks } from ".";
 import { FiPhone } from "react-icons/fi";
 import { IoPersonSharp } from "react-icons/io5";
 import { IoIosArrowDown } from "react-icons/io";
-import { deleteCookie } from "@/app/actions";
+import { addCookie, deleteCookie } from "@/app/actions";
 
 interface Currency {
   id: number;
@@ -59,6 +59,16 @@ const TopBar = ({
       ? countries.find((item) => item.id === parseInt(countryId))
       : countries[0]
   );
+
+  useEffect(() => {
+    if (!countryId) {
+      addCookie("country_id", activeCountry.id);
+      addCookie("currency", activeCountry.currency.code);
+      addCookie("currency_id", activeCountry.currency.id);
+      addCookie("iso", activeCountry.iso);
+    }
+  }, []);
+
   const handleCountryChange = (country: Country) => {
     setActiveCountry(country);
   };

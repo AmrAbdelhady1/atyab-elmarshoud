@@ -7,7 +7,7 @@ interface OrderDetailsItemMobileProps {
 	product: string;
 	quantity: number;
 	price: string;
-	size: string;
+	currency: string;
 }
 
 const OrderDetailsItemMobile: React.FC<OrderDetailsItemMobileProps> = ({
@@ -15,7 +15,7 @@ const OrderDetailsItemMobile: React.FC<OrderDetailsItemMobileProps> = ({
 	product,
 	quantity,
 	price,
-	size,
+	currency,
 }) => {
 	const t = useTranslations();
 	return (
@@ -24,6 +24,8 @@ const OrderDetailsItemMobile: React.FC<OrderDetailsItemMobileProps> = ({
 				<Image
 					alt='product'
 					src={image}
+					width={115}
+					height={115}
 					className='w-[115px] h-[115px] object-contain border-[0.5px] border-gray-300 hover:border hover:border-black transition-all'
 				/>
 			</div>
@@ -42,15 +44,15 @@ const OrderDetailsItemMobile: React.FC<OrderDetailsItemMobileProps> = ({
 			<div className='border-t-[1px] border-[#e0e0e0] py-5'>
 				<div className='flex justify-between'>
 					<p className='font-raleway text-lg font-bold'>{t('Price')}:</p>
-					<p className='font-nunito text-lg font-semibold'>{price}</p>
+					<p className='font-nunito text-lg font-semibold'>{price} {currency}</p>
 				</div>
 			</div>
-			<div className='border-t-[1px] border-[#e0e0e0] py-5'>
+			{/* <div className='border-t-[1px] border-[#e0e0e0] py-5'>
 				<div className='flex justify-between'>
 					<p className='font-raleway text-lg font-bold'>{t('Size')}:</p>
 					<p className='font-nunito text-lg font-semibold'>{t(size)}</p>
 				</div>
-			</div>
+			</div> */}
 		</div>
 	);
 };
