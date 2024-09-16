@@ -6,8 +6,8 @@ import { motion, AnimatePresence, wrap } from "framer-motion";
 import { IoIosArrowForward, IoIosArrowBack } from "react-icons/io";
 
 const images = [
-  "https://atyabalmarshoud.com/storage/mmUFE7EnYc2yUAd5P5PMFs8pYUgLeEUfYcwkfFrk.jpg",
-  "https://atyabalmarshoud.com/storage/7ec5KKR90D0KUKibe7fsRHEkrP27macJV9rlGZjv.jpg",
+  "https://www.atyabalmarshoud.com/cdn/shop/files/LYCHEE_BACK_IN_STOCK__MOB.jpg?v=1716377556&width=450",
+  "https://www.atyabalmarshoud.com/cdn/shop/files/ALL_IN_ALL_MOB_copy.jpg?v=1721889270&width=320",
 ];
 
 const variants = {
@@ -49,7 +49,7 @@ const Slider = () => {
       <div className="relative flex items-center justify-center h-[40vw] mb-10">
         <AnimatePresence initial={false} custom={direction}>
           <motion.img
-            className="w-full h-full absolute"
+            className="w-full h-full absolute object-none"
             key={page}
             src={images[imageIndex]}
             custom={direction}

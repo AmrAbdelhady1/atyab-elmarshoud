@@ -72,7 +72,7 @@ const Footer = ({ lang }: any) => {
 						href='https://cryptdev.com/'
 						target='_black'
 						className='top-bar-link'>
-						{t('Powered By')} CRYPTDEV
+						{t('Powered By')} AMR
 					</Link>
 				</div>
 				<Image src={paymentIcons} alt='icons' className='w-fit h-fit' />

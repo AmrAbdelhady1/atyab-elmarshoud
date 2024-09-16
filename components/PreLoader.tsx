@@ -17,7 +17,7 @@ const PreLoader = () => {
       <div className="fixed w-full top-0 bottom-0 left-0 right-0 min-h-screen z-50 bg-white flex items-center justify-center">
         <motion.img
           className="w-[100px] h-[100px]"
-          src="https://atyabalmarshoud.com/web/assets/images/favicon/safari-pinned-tab.svg"
+          src="assets/images/logo.png"
           animate={{ scale: ["100%", "70%", "100%"] }}
           transition={{ duration: 2.8, ease: "easeInOut", repeat: Infinity }}
         />
