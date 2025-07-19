@@ -62,10 +62,10 @@ const TopBar = ({
 
   useEffect(() => {
     if (!countryId) {
-      addCookie("country_id", activeCountry.id);
-      addCookie("currency", activeCountry.currency.code);
-      addCookie("currency_id", activeCountry.currency.id);
-      addCookie("iso", activeCountry.iso);
+      addCookie("country_id", activeCountry?.id);
+      addCookie("currency", activeCountry?.currency.code);
+      addCookie("currency_id", activeCountry?.currency.id);
+      addCookie("iso", activeCountry?.iso);
     }
   }, []);
 

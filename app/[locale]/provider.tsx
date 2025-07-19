@@ -17,9 +17,9 @@ const Provider = async ({ child, lang }: any) => {
   return (
       <ReduxProvider
         child={child}
-        // countries={countries}
-        // categories={categories}
-        // username={username}
+        countries={[]}
+        categories={[]}
+        username={[]}
         lang={lang}
         countryId={countryId}
       />
